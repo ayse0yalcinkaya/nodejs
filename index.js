@@ -1,39 +1,27 @@
-var http = require("http");
-var fs = require("fs");
+const express = require("express");
+const app = express();
+
+app.set("view engine", "ejs");
 
 
-var server = http.createServer((req, res) => {
-    
-    if(req.url == '/') {
-        fs.readFile("index.html", (err, html) => {
-            res.write(html); //gelen içerik
-            res.end();
+// routes
 
-        });
-        
-
-    } else if(req.url == '/products') {
-        fs.readFile("urunler.html", (err, html) => {
-            res.write(html);
-            res.end();
-
-          
-        })
-        
-
-    } else {
-        fs.readFile("404.html", (err, html) => {
-            res.write(html);
-            res.end(); //response'ı end etmen gerekir geleni görmen için
-
-          
-        })
-        
-    }
-    
+app.use("/product/:id", function(req, res) {
+    //res.send("ürün details " + req.params.id);
+    res.render("urun-details");
 });
 
 
-server.listen(3000, () => {
-    console.log("node.js server at port 3000");
+app.use("/products", function(req, res) {
+    //res.send("ürünler");
+    res.render("urunler");
+});
+
+app.use("/", function(req, res) {
+    // res.send("ana sayfa");
+    res.render("index");
+});
+
+app.listen(3000, () => {
+    console.log("listening on port 3000");
 });
